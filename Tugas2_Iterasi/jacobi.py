@@ -44,9 +44,11 @@ class Jacobi:
 
             self.__var.append(globals()[f"x{i + 1}"])
 
-        self.__log_iter = {0: {
-            "iter": 0,
-        }}
+        self.__log_iter = {
+            0: {
+                "iter": 0,
+            }
+        }
 
         for i in range(len(self.eq)):
             self.__log_iter[0][f"x{i + 1}"] = 0
@@ -69,7 +71,6 @@ class Jacobi:
                     if k != j:
                         self.eq[j] = self.eq[j].replace(f"x{k + 1}", str(self.__var[k]))
 
-
             for j in range(len(self.eq)):
                 res_const = self.eq[j].split("=")[1]
                 var_const = clean_eq(self.eq[j].split("=")[0])
@@ -89,7 +90,6 @@ class Jacobi:
                 self.__log_iter[i + 1][f"x{j + 1}"] = self.__var[j]
 
         return self.__var
-
 
     def get_log(self) -> dict:
         return self.__log_iter
