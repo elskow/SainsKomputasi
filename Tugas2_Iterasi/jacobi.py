@@ -9,19 +9,11 @@ eq = [
 ]
 
 
-def calculate_norm(x1: list, x2: list) -> float:
-    return sum((a - b) ** 2 for a, b in zip(x1, x2)) ** 0.5
-
-
-def calculate_norm_inf(x1: list, x2: list) -> float:
-    return max(abs(a - b) for a, b in zip(x1, x2))
-
-
 class Jacobi:
     def __init__(self, _eq: list) -> None:
         self.eq = [
-            sym.sympify(str(sym.solve(sym.sympify(eq), sym.Symbol(f"x{i + 1}"))[0]))
-            for i, eq in enumerate(_eq)
+            sym.sympify(str(sym.solve(sym.sympify(__eq), sym.Symbol(f"x{i + 1}"))[0]))
+            for i, __eq in enumerate(_eq)
         ]
         self.x = {0: [0] * len(_eq)}
         self.__log_iter = {
@@ -34,17 +26,25 @@ class Jacobi:
                 sym.Symbol(f"x{k+1}"): float(self.x[i][k])
                 for k in range(len(self.x[i]))
             }
-            x_curr = [eq.subs(subs_dict).evalf() for eq in self.eq]
+            x_curr = [_eq.subs(subs_dict).evalf() for _eq in self.eq]
             self.x[i + 1] = x_curr
             self.__log_iter[i + 1] = {
                 "iter": i + 1,
                 "xi": self.x[i + 1],
-                "norm": calculate_norm(self.x[i + 1], self.x[i]),
-                "norm_inf": calculate_norm_inf(self.x[i + 1], self.x[i]),
+                "norm": self.norm(self.x[i + 1], self.x[i]),
+                "norm_inf": self.norm_inf(self.x[i + 1], self.x[i]),
             }
         return self.x[n_iter]
 
-    def get_log(self) -> dict:
+    @staticmethod
+    def norm(x1: list, x2: list) -> float:
+        return sum((a - b) ** 2 for a, b in zip(x1, x2)) ** 0.5
+
+    @staticmethod
+    def norm_inf(x1: list, x2: list) -> float:
+        return max(abs(a - b) for a, b in zip(x1, x2))
+
+    def get_iterations(self) -> dict:
         n_iter = len(self.__log_iter) - 1
         self.__log_iter[n_iter]["norm"] = self.__log_iter[n_iter - 1]["norm"]
         self.__log_iter[n_iter]["norm_inf"] = self.__log_iter[n_iter - 1]["norm_inf"]
@@ -54,4 +54,4 @@ class Jacobi:
 if __name__ == "__main__":
     jacobi = Jacobi(eq)
     pprint(jacobi.solve(n_iter=41))
-    pprint(jacobi.get_log())
+    pprint(jacobi.get_iterations())

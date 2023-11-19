@@ -45,7 +45,9 @@ class Secant:
             x1 = x2
             x2 = next_guess
 
-        min_error = min(self.iterations, key=lambda x: self.iterations[x]["error"])
+        min_error = min(
+            self.iterations, key=lambda x_min: self.iterations[x_min]["error"]
+        )
         return self.iterations[min_error]["x3"]
 
     @staticmethod
@@ -67,34 +69,3 @@ if __name__ == "__main__":
 
     pprint(secant.get_iterations())
     print(f"\nResult X: {x}")
-
-# Output:
-# From x**3 + x**2 - 3*x - 3 = 0, init_x1 = 1, init_x2 = 2
-#
-# {1: {'f(x1)': -4, 'f(x2)': 3, 'f(x3)': -1.3646, 'x1': 1, 'x2': 2, 'x3': 1.5714},
-#  2: {'f(x1)': 3,
-#      'f(x2)': -1.3646,
-#      'f(x3)': -0.2478,
-#      'x1': 2,
-#      'x2': 1.5714,
-#      'x3': 1.7054},
-#  3: {'f(x1)': -1.3646,
-#      'f(x2)': -0.2478,
-#      'f(x3)': 0.0289,
-#      'x1': 1.5714,
-#      'x2': 1.7054,
-#      'x3': 1.7351},
-#  4: {'f(x1)': -0.2478,
-#      'f(x2)': 0.0289,
-#      'f(x3)': -0.0024,
-#      'x1': 1.7054,
-#      'x2': 1.7351,
-#      'x3': 1.7318},
-#  5: {'f(x1)': 0.0289,
-#      'f(x2)': -0.0024,
-#      'f(x3)': -0.0024,
-#      'x1': 1.7351,
-#      'x2': 1.7318,
-#      'x3': 1.7318}}
-#
-# Result: 1.7318
