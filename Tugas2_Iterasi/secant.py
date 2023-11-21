@@ -1,7 +1,9 @@
 import sympy as sym
 from pprint import pprint
 
-fun = "x**3 + x**2 - 3*x - 3"
+fun = "10*x**3 + 5*x**2 + 6*x - 3717"
+init_x1, init_x2 = 1, 2
+n_iter = 17
 
 
 class Secant:
@@ -39,7 +41,7 @@ class Secant:
                 "f(x1)": function_value_x1,
                 "f(x2)": function_value_x2,
                 "f(x3)": self.function.subs(self.x, next_guess),
-                "error": self.calculate_error(x2, next_guess),
+                "error": self.error(x2, next_guess),
             }
 
             x1 = x2
@@ -51,7 +53,7 @@ class Secant:
         return self.iterations[min_error]["x3"]
 
     @staticmethod
-    def calculate_error(x1: float, x2: float) -> float:
+    def error(x1: float, x2: float) -> float:
         return abs((x1 - x2) / x1) * 100
 
     def get_iterations(self) -> dict:
@@ -59,13 +61,10 @@ class Secant:
 
 
 if __name__ == "__main__":
-    init_x1 = 1
-    init_x2 = 2
-
     secant = Secant(fun, init_x1, init_x2)
     print(f"From {fun} = 0, init_x1 = {init_x1}, init_x2 = {init_x2} \n")
 
-    x = secant.solve(n_iter=9)
+    x = secant.solve(n_iter=n_iter)
 
     pprint(secant.get_iterations())
     print(f"\nResult X: {x}")

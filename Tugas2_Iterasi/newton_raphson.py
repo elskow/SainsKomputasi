@@ -1,7 +1,9 @@
 import sympy as sym
 from pprint import pprint
 
-fun = "x**3 + x**2 - 3*x - 3"
+fun = "10*x**3 + 5*x**2 + 6*x - 3717"
+init_x = 1
+n_iter = 13
 
 
 class NewtonRaphson:
@@ -35,7 +37,7 @@ class NewtonRaphson:
                 "next_guess": next_guess,
                 "function_value": function_value,
                 "derivative_value": derivative_value,
-                "error": self.calculate_error(current_guess, next_guess),
+                "error": self.error(current_guess, next_guess),
             }
 
             current_guess = next_guess
@@ -43,7 +45,7 @@ class NewtonRaphson:
         return current_guess
 
     @staticmethod
-    def calculate_error(x1: float, x2: float) -> float:
+    def error(x1: float, x2: float) -> float:
         return abs((x1 - x2) / x1) * 100
 
     def get_iterations(self) -> dict:
@@ -51,12 +53,10 @@ class NewtonRaphson:
 
 
 if __name__ == "__main__":
-    init_x = 1
-
     newton = NewtonRaphson(fun, init_x)
     print(f"From {fun} = 0, init_x = {init_x} \n")
 
-    x = newton.solve(n_iter=10)
+    x = newton.solve(n_iter=n_iter)
 
     pprint(newton.get_iterations())
     print(f"\nRoot: {x}")
